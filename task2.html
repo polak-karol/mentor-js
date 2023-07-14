@@ -34,8 +34,17 @@
       const numberInputElement = document.querySelector(".js-input");
       const boxesContainer = document.querySelector("#boxes");
 
+      function isValueInRange(min, max, value) {
+        return min <= value && value <= max;
+      }
+
       createButtonElement.addEventListener("click", () => {
-        createBoxes(numberInputElement.value);
+        const parsedValue = parseInt(numberInputElement.value);
+        const parsedMin = parseInt(numberInputElement.min);
+        const parsedMax = parseInt(numberInputElement.max);
+
+        if (isValueInRange(parsedMin, parsedMax, parsedValue))
+          createBoxes(parsedValue);
         numberInputElement.value = "";
       });
 
