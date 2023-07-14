@@ -60,10 +60,7 @@
             (hit) =>
               `<li><img onclick="showImageModal(event)" src="${hit.webformatURL}" data-source="${hit.largeImageURL}" alt="${hit.tags}"/></li>`
           )
-          .reduce((accumulator, element) => {
-            accumulator += element;
-            return accumulator;
-          }, "");
+          .join("");
 
         imageContainer.innerHTML += html;
         imagesPage++;
