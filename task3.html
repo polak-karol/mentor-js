@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Zadanie 3 - Mentor JS</title>
+    <link rel="stylesheet" href="./basicLightbox.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="task2.html">Poprzednie zadanie</a>
+      <h1>Zadanie 3</h1>
+      <a href="task1.html">Następne zadanie</a>
+    </nav>
+    <form id="search-form">
+      <input
+        type="text"
+        name="query"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+    </form>
+    <ul id="image-container"></ul>
+    <script src="./basicLightbox.min.js"></script>
+    <script>
+      let imagesPage = 1;
+      const searchParams = new URLSearchParams(
+        window.location.search.substring(1)
+      );
+      const imageContainer = document.querySelector("#image-container");
+      const options = {
+        root: null,
+        threshold: 0.5,
+      };
+      const observer = new IntersectionObserver(
+        getImagesWhenIsIntersecting,
+        options
+      );
+
+      function getImagesWhenIsIntersecting(entries, observer) {
+        if (entries[0].isIntersecting) {
+          observer.unobserve(imageContainer.lastElementChild);
+          handleGetImagesRequest();
+        }
+      }
+
+      function showImageModal(event) {
+        basicLightbox
+          .create(
+            `<a href="${event.target.dataset.source}"><img src="${event.target.dataset.source}" alt="full-screen-photo"></a>`
+          )
+          .show();
+      }
+
+      function getImagesSuccess(response) {
+        const html = response.hits
+          .map(
+            (hit) =>
+              `<li><img onclick="showImageModal(event)" src="${hit.webformatURL}" data-source="${hit.largeImageURL}" alt="${hit.tags}"/></li>`
+          )
+          .reduce((accumulator, element) => {
+            accumulator += element;
+            return accumulator;
+          }, "");
+
+        imageContainer.innerHTML += html;
+        imagesPage++;
+
+        imageContainer.lastElementChild.firstElementChild.addEventListener(
+          "load",
+          (event) => {
+            observer.observe(imageContainer.lastElementChild);
+          }
+        );
+      }
+
+      function getImagesError(error) {
+        console.log(error);
+      }
+
+      async function getImages() {
+        const response = await fetch(
+          `https://pixabay.com/api/?key=38221879-829388789657eb1e4a10e6dc9&q=${searchParams.get(
+            "query"
+          )}&page=${imagesPage}&lang=pl`
+        );
+
+        return response.json();
+      }
+
+      function handleGetImagesRequest() {
+        return getImages().then(getImagesSuccess, getImagesError);
+      }
+
+      if (searchParams.has("query")) handleGetImagesRequest();
+    </script>
+  </body>
+</html>

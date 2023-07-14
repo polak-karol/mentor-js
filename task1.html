@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Zadanie 1 - Mentor JS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="task3.html">Poprzednie zadanie</a>
+      <h1>Zadanie 1</h1>
+      <a href="task2.html">Następne zadanie</a>
+    </nav>
+    <div class="result-info-wrapper">
+      <span>Rezultat zadania wyświetlony jest w konsoli.</span>
+    </div>
+    <script>
+      class StringBuilder {
+        constructor(baseString = "") {
+          this.value = baseString;
+        }
+
+        append(str) {
+          this.value += str;
+
+          return this;
+        }
+
+        prepend(str) {
+          this.value = str + this.value;
+
+          return this;
+        }
+
+        pad(str) {
+          this.value = str + this.value + str;
+
+          return this;
+        }
+      }
+
+      const builder = new StringBuilder(".");
+
+      builder.append("^").prepend("^").pad("=");
+
+      console.log(builder);
+    </script>
+  </body>
+</html>

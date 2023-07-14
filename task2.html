@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Zadanie 2 - Mentor JS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="task1.html">Poprzednie zadanie</a>
+      <h1>Zadanie 2</h1>
+      <a href="task3.html">Następne zadanie</a>
+    </nav>
+    <div id="controls">
+      <input type="number" min="0" max="100" step="1" class="js-input" />
+      <button type="button" data-action="create">Utwórz</button>
+      <button type="button" data-action="destroy">Usuń</button>
+    </div>
+
+    <div id="boxes"></div>
+    <script>
+      let boxWidth = 30;
+      let boxHeight = 30;
+      const boxWidthStep = 10;
+      const boxHeightStep = 10;
+      const createButtonElement = document.querySelector(
+        "[data-action=create]"
+      );
+      const destroyButtonElement = document.querySelector(
+        "[data-action=destroy]"
+      );
+      const numberInputElement = document.querySelector(".js-input");
+      const boxesContainer = document.querySelector("#boxes");
+
+      createButtonElement.addEventListener("click", () => {
+        createBoxes(numberInputElement.value);
+        numberInputElement.value = "";
+      });
+
+      destroyButtonElement.addEventListener("click", () => {
+        boxesContainer.remove();
+      });
+
+      function getRandomColorIntensity() {
+        return Math.floor(Math.random() * 256);
+      }
+
+      function createBoxes(amount) {
+        for (let i = 0; i < amount; i++) {
+          const box = document.createElement("div");
+          box.style.width = `${boxWidth + boxWidthStep * i}px`;
+          box.style.height = `${boxHeight + boxHeightStep * i}px`;
+          box.style.backgroundColor = `rgb(${getRandomColorIntensity()},${getRandomColorIntensity()},${getRandomColorIntensity()})`;
+          boxesContainer.appendChild(box);
+        }
+      }
+    </script>
+  </body>
+</html>
